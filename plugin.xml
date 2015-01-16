@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+  <extension point="com.dynatrace.diagnostics.pdk.pluginconfig" id="com.dynatrace.diagnostics.plugin.extendedexecutor.GenericExecutionPlugin" name="Generic Execution Plugin">
+    <information>
+      <category value="" />
+      <description value="GE Plugin executes commands remotely or locally as well as SOAP web services." />
+      <license value="dynaTraceBSD.txt" />
+      <supportlevel value="unsupported" />
+    </information>
+    <configuration>
+      <property key="isWS" label="Run Web Service?" type="boolean" description="Boolean indicator which is set to TRUE when WS are used and to FALSE when command is executing" default="false" />
+      <property key="method" label="Method" type="list" description="Specify the type of Connection" default="Local">
+        <list>
+          <item value="SSH" />
+          <item value="Local" />
+        </list>
+        <visibility>
+          <rule key="isWS" value="false" />
+        </visibility>
+      </property>
+      <property key="authMethod" label="Authentication Method" type="list" description="Specify the type of SSH Authentication." default="Password">
+        <list>
+          <item value="Password" />
+          <item value="PublicKey" />
+        </list>
+        <visibility>
+          <rule key="method" value="SSH" />
+        </visibility>
+      </property>
+      <property key="host" label="Host" type="string" description="The server where command will be executed." default="myServer" multiline="false">
+        <visibility>
+          <rule key="method" value="SSH" />
+        </visibility>
+      </property>
+      <property key="port" label="Port" type="long" description="The host's port. Default is port 22." default="22">
+        <visibility>
+          <rule key="method" value="SSH" />
+        </visibility>
+      </property>
+      <property key="user" label="User" type="string" description="User that is used for authorization with the host." default="" multiline="false">
+        <visibility>
+          <rule key="method" value="SSH" />
+        </visibility>
+      </property>
+      <property key="password" label="Password" type="password" description="User's password." default="">
+        <visibility>
+          <rule key="authMethod" value="Password" />
+        </visibility>
+      </property>
+      <property key="publicKeyPassphrase" label="Passphrase" type="password" description="The password for the pem-file." default="">
+        <visibility>
+          <rule key="authMethod" value="PublicKey" />
+        </visibility>
+      </property>
+      <property key="keyFile" label="Key-File" type="string" description="The keyfile for the ssh-keypair, e.g. C:/.ssh/id_rsa" default="" multiline="false">
+        <visibility>
+          <rule key="authMethod" value="PublicKey" />
+        </visibility>
+      </property>
+      <property key="command" label="Command" type="string" description="Command which will be executed on the server" default="ping localhost" multiline="false">
+        <visibility>
+          <rule key="isWS" value="false" />
+        </visibility>
+      </property>
+      <property key="wsdl" label="WS WSDL" type="string" description="URL to the WSDL file" default="" multiline="false">
+        <visibility>
+          <rule key="isWS" value="true" />
+        </visibility>
+      </property>
+      <property key="wsOperation" label="WS Operation" type="string" description="Name of the web service operation" default="" multiline="false">
+        <visibility>
+          <rule key="isWS" value="true" />
+        </visibility>
+      </property>
+      <property key="wsParameters" label="WS Parameters" type="string" description="Parameter-name=parameter-value pairs which will be used for substitution of parameters. One pair per line." default="" multiline="true">
+        <visibility>
+          <rule key="isWS" value="true" />
+        </visibility>
+      </property>
+      <property key="isWSProxy" label="Use Web Service Proxy?" type="boolean" description="Boolean indicator which is set to TRUE when WS are used and to FALSE when command is executing" default="false">
+        <visibility>
+          <rule key="isWS" value="true" />
+        </visibility>
+      </property>
+      <property key="isDotNET" label="isDotNET" type="boolean" description="Is &quot;true&quot; when plugin invokes .NET web service" default="false">
+        <visibility>
+          <rule key="isWS" value="true" />
+        </visibility>
+      </property>
+      <property key="wsProxyHost" label="WS Proxy Host" type="string" description="WS Proxy Host" default="" multiline="false">
+        <visibility>
+          <rule key="isWSProxy" value="true" />
+        </visibility>
+      </property>
+      <property key="wsProxyPort" label="WS Proxy Port" type="long" description="WS Proxy Port" default="6670">
+        <visibility>
+          <rule key="isWSProxy" value="true" />
+        </visibility>
+      </property>
+      <property key="wsProxyUser" label="WS Proxy Authentication User" type="string" description="User to authenticate access through proxy" default="" multiline="false">
+        <visibility>
+          <rule key="isWSProxy" value="true" />
+        </visibility>
+      </property>
+      <property key="wsProxyPassword" label="WS Proxy Authentication Password" type="password" description="Password which will be used to authenticate user's requests coming through the proxy" default="">
+        <visibility>
+          <rule key="isWSProxy" value="true" />
+        </visibility>
+      </property>
+      <property key="wsUsePrefix" label="WS Use Prefix" type="boolean" description="indicator which shows if plugin will add a namespace prefix to child elements in the SOAP request" default="false">
+        <visibility>
+          <rule key="isWS" value="true" />
+        </visibility>
+      </property>
+      <property key="dateFormat" label="Date Format" type="string" description="date format of the incident's  START_DATE and END_DATE. If missng default locale format is used" default="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" multiline="false" />
+      <property key="capture" label="Capture Output" type="boolean" description="Defines if the output of the executed command should be captured and returned as message." default="false">
+        <visibility>
+          <rule key="isWS" value="false" />
+        </visibility>
+      </property>
+      <property key="outputBufferSize" label="outputBufferSize" type="long" description="Size of the output buffer" default="2048">
+        <visibility>
+          <rule key="isWS" value="false" />
+        </visibility>
+      </property>
+      <property key="returnedMeasures" label="Returned Measures" type="string" description="Returned measures contains list of names of measures which are returned by the command in the first line of the command's output " default="" multiline="false">
+        <visibility>
+          <rule key="isWS" value="false" />
+        </visibility>
+      </property>
+      <property key="rcMeasureName" label="RC Measure" type="string" description="Name of the dynamic measure which defines meaning of the return code from the executed command" default="" multiline="false">
+        <visibility>
+          <rule key="isWS" value="false" />
+        </visibility>
+      </property>
+      <property key="regex" label="Regular Expression" type="string" description="The regular expression the command's output should be matched against." default="(.*)Result(.*)" multiline="false" />
+      <property key="successDefinition" label="Success Definition" type="list" description="Defines condition under which monitor returns success: if regular expression matches or not." default="on match">
+        <list>
+          <item value="on match" />
+          <item value="on no match" />
+        </list>
+      </property>
+    </configuration>
+  </extension>
+  <extension point="com.dynatrace.diagnostics.pdk.monitor" id="com.dynatrace.diagnostics.plugin.extendedexecutor.GenericExecutionPlugin.monitor" name="Generic Execution Monitor">
+    <plugin configid="com.dynatrace.diagnostics.plugin.extendedexecutor.GenericExecutionPlugin" class="com.dynatrace.diagnostics.plugin.extendedexecutor.GEMonitor" />
+  </extension>
+  <extension point="com.dynatrace.diagnostics.pdk.monitormetricgroup" id="com.dynatrace.diagnostics.plugin.extendedexecutor.GenericExecutionPlugin.monitor.metricgroup" name="Generic Execution Monitor">
+    <metricgroup monitorid="com.dynatrace.diagnostics.plugin.extendedexecutor.GenericExecutionPlugin.monitor">
+      <metric name="executionSuccess" unit="number" description="Returns depending on Monitor's configuration if execution was successful (based on regex pattern matching of result)." />
+      <metric name="returnCode" unit="number" description="based metric" />
+      <metric name="returnedMeasures" unit="number" description="based metric" />
+    </metricgroup>
+  </extension>
+  <extension point="com.dynatrace.diagnostics.pdk.task" id="com.dynatrace.diagnostics.plugin.extendedexecutor.GenericExecutionPlugin.task" name="Generic Execution Task">
+    <plugin configid="com.dynatrace.diagnostics.plugin.extendedexecutor.GenericExecutionPlugin" class="com.dynatrace.diagnostics.plugin.extendedexecutor.GETask" />
+  </extension>
+  <extension point="com.dynatrace.diagnostics.pdk.action" id="com.dynatrace.diagnostics.plugin.extendedexecutor.GenericExecutionPlugin.action" name="Generic Execution Action">
+    <plugin configid="com.dynatrace.diagnostics.plugin.extendedexecutor.GenericExecutionPlugin" class="com.dynatrace.diagnostics.plugin.extendedexecutor.GEAction" />
+  </extension>
+</plugin>
+

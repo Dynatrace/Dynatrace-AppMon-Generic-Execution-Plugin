@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Require-Bundle: com.dynatrace.diagnostics.sdk
+Ant-Version: Apache Ant 1.7.1
+Bundle-Vendor: dynaTrace Community
+Bundle-ClassPath: .,lib/actionhelper_5.5.4.jar,lib/asm-4.0.jar,lib/com
+ mons-lang3-3.1.jar,lib/commons-logging-1.1.1.jar,lib/gmbal-api-only.j
+ ar,lib/groovy-2.0.4.jar,lib/groovy-xml-2.0.4.jar,lib/httpclient-4.2.2
+ .jar,lib/httpcore-4.2.2.jar,lib/jaxb-api.jar,lib/jaxb-impl.jar,lib/ja
+ xb-xjc.jar,lib/jaxws-api.jar,lib/jaxws-rt.jar,lib/jaxws-tools.jar,lib
+ /policy.jar,lib/soa-model-core-1.4.1.4.jar,lib/soa-model-distribution
+ -1.4.1.4.jar,lib/stax-ex.jar,lib/streambuffer.jar,lib/trilead-ssh2-bu
+ ild213.jar
+Bundle-Version: 5.5.8
+Bundle-Name: Generic Execution Plugin
+Created-By: 17.0-b16 (Sun Microsystems Inc.)
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: com.dynatrace.diagnostics.plugin.extended.Generic
+ ExecutionPlugin;singleton:=true
+
