@@ -10,8 +10,8 @@ Bundle-ClassPath: .,lib/actionhelper_5.5.4.jar,lib/asm-4.0.jar,lib/com
  /policy.jar,lib/soa-model-core-1.4.1.4.jar,lib/soa-model-distribution
  -1.4.1.4.jar,lib/stax-ex.jar,lib/streambuffer.jar,lib/trilead-ssh2-bu
  ild213.jar
-Bundle-Version: 5.5.8
-Bundle-Name: Generic Execution Plugin
+Bundle-Version: 5.5.9
+Bundle-Name: Extended Generic Execution Plugin
 Created-By: 17.0-b16 (Sun Microsystems Inc.)
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: com.dynatrace.diagnostics.plugin.extended.Generic
