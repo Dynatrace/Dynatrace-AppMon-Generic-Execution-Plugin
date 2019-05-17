@@ -1,22 +1,32 @@
+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+// Jad home page: http://www.kpdus.com/jad.html
+// Decompiler options: packimports(3) 
+// Source File Name:   WsOpParams.java
+
 package com.dynatrace.diagnostics.plugin.extendedexecutor.helper;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import com.predic8.schema.Element;
+public class WsOpParams
+{
 
-public class WsOpParams {
-	private List<Element> argList;
-	private LinkedHashMap<Element, List<Element>> complexTypes;
-	
-	public WsOpParams(List<Element> argList, LinkedHashMap<Element, List<Element>> complexTypes) {
-		this.argList = argList;
-		this.complexTypes = complexTypes;
-	}
-	public List<Element> getArgList() {
-		return this.argList;
-	}
-	public LinkedHashMap<Element, List<Element>> getComplexTypes() {
-		return complexTypes;
-	}
+    public WsOpParams(List argList, LinkedHashMap complexTypes)
+    {
+        this.argList = argList;
+        this.complexTypes = complexTypes;
+    }
+
+    public List getArgList()
+    {
+        return argList;
+    }
+
+    public LinkedHashMap getComplexTypes()
+    {
+        return complexTypes;
+    }
+
+    private List argList;
+    private LinkedHashMap complexTypes;
 }

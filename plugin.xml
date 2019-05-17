@@ -38,7 +38,7 @@
           <rule key="method" value="SSH" />
         </visibility>
       </property>
-      <property key="user" label="User" type="string" description="User that is used for authorization with the host." default="" multiline="false">
+      <property key="user" label="User" type="string" description="User that is used for authentication with the host." default="" multiline="false">
         <visibility>
           <rule key="method" value="SSH" />
         </visibility>
@@ -58,11 +58,39 @@
           <rule key="authMethod" value="PublicKey" />
         </visibility>
       </property>
-      <property key="command" label="Command" type="string" description="Command which will be executed on the server" default="ping localhost" multiline="false">
+      <property key="isMultiline" label="isMultiline" type="boolean" description="Boolean indicator for Local method. It is true when command parameter is multiline" default="false">
+        <visibility>
+          <rule key="method" value="Local" />
+        </visibility>
+      </property>
+      <property key="command" label="Command" type="string" description="Command and its arguments which will be executed on the server" default="" multiline="false">
         <visibility>
           <rule key="isWS" value="false" />
         </visibility>
       </property>
+      <property key="commandMultiline" label="Command Multiline" type="string" description="Represents executed command and its arguments - one orgument per line. The very first line is the command itself" default="" multiline="true">
+        <visibility>
+          <rule key="isMultiline" value="true" />
+        </visibility>
+      </property>
+      <property key="isEscapeChars" label="isEscapeChars" type="boolean" description="Shows if plugin will escape special characters in the command parameters." default="true">
+        <visibility>
+          <rule key="isWS" value="false" />
+        </visibility>
+      </property>
+      <property key="capture" label="Capture Output" type="boolean" description="Defines if the output of the executed command should be captured and returned as message." default="false" />
+      <property key="Timeout" label="Timeout" type="long" description="Timeout in milliseconds for command to be executed locally" default="60000">
+        <visibility>
+          <rule key="isWS" value="false" />
+        </visibility>
+      </property>
+      <property key="outputBufferSize" label="outputBufferSize" type="long" description="Size of the output buffer" default="2048">
+        <visibility>
+          <rule key="isWS" value="false" />
+        </visibility>
+      </property>
+      <property key="dateFormat" label="Date Format" type="string" description="date format of the incident's  START_DATE and END_DATE. If missng default locale format is used" default="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" multiline="false" />
+      <property key="targetTimezone" label="WS Target Timezone" type="string" description="A Timezone that time data will be converting to from the current timezone" default="" multiline="false" />
       <property key="wsdl" label="WS WSDL" type="string" description="URL to the WSDL file" default="" multiline="false">
         <visibility>
           <rule key="isWS" value="true" />
@@ -73,17 +101,40 @@
           <rule key="isWS" value="true" />
         </visibility>
       </property>
-      <property key="wsParameters" label="WS Parameters" type="string" description="Parameter-name=parameter-value pairs which will be used for substitution of parameters. One pair per line." default="" multiline="true">
+      <property key="isXPathSyntax" label="IsXPathSyntax" type="boolean" description="If 'true' then XPath syntax used for the WS Parameters" default="true">
         <visibility>
           <rule key="isWS" value="true" />
         </visibility>
       </property>
-      <property key="isWSProxy" label="Use Web Service Proxy?" type="boolean" description="Boolean indicator which is set to TRUE when WS are used and to FALSE when command is executing" default="false">
+      <property key="wsParameters" label="WS Parameters" type="string" description="Parameter-name=parameter-value pairs where parameter-name can be in XPath format" default="" multiline="true">
         <visibility>
           <rule key="isWS" value="true" />
         </visibility>
       </property>
-      <property key="isDotNET" label="isDotNET" type="boolean" description="Is &quot;true&quot; when plugin invokes .NET web service" default="false">
+      <property key="isWSAuth" label="Is Authentication Required?" type="boolean" description="Boolean indicator which is set to TRUE when authentication is required otherwise it is false" default="false">
+        <visibility>
+          <rule key="isWS" value="true" />
+        </visibility>
+      </property>
+      <property key="wsUser" label="WS User" type="string" description="WS user name if authentication is enabled" default="" multiline="false">
+        <visibility>
+          <rule key="isWSAuth" value="true" />
+        </visibility>
+      </property>
+      <property key="wsPassword" label="WS Password" type="password" description="WS password for the WS user" default="">
+        <visibility>
+          <rule key="isWSAuth" value="true" />
+        </visibility>
+      </property>
+      <property key="wsAuthMethod" label="WS Authentication Method" type="list" description="WS Authentication Method" default="Basic">
+        <list>
+          <item value="Basic" />
+        </list>
+        <visibility>
+          <rule key="isWSAuth" value="true" />
+        </visibility>
+      </property>
+      <property key="isWSProxy" label="Use Web Service Proxy?" type="boolean" description="Boolean indicator which is set to TRUE when WS Proxy is used otherwise it is FALSE" default="false">
         <visibility>
           <rule key="isWS" value="true" />
         </visibility>
@@ -108,38 +159,87 @@
           <rule key="isWSProxy" value="true" />
         </visibility>
       </property>
+      <property key="isDotNET" label="isDotNET" type="boolean" description="Is &quot;true&quot; when plugin invokes .NET web service" default="false">
+        <visibility>
+          <rule key="isWS" value="true" />
+        </visibility>
+      </property>
       <property key="wsUsePrefix" label="WS Use Prefix" type="boolean" description="indicator which shows if plugin will add a namespace prefix to child elements in the SOAP request" default="false">
         <visibility>
           <rule key="isWS" value="true" />
         </visibility>
       </property>
-      <property key="dateFormat" label="Date Format" type="string" description="date format of the incident's  START_DATE and END_DATE. If missng default locale format is used" default="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" multiline="false" />
-      <property key="capture" label="Capture Output" type="boolean" description="Defines if the output of the executed command should be captured and returned as message." default="false">
+      <property key="isWSReturnedMeasures" label="isWSReturnedMeasures" type="boolean" description="if true gather returned measures" default="false">
+        <visibility>
+          <rule key="isWS" value="true" />
+        </visibility>
+      </property>
+      <property key="returnedMeasures" label="Returned Measures" type="string" description="Returned measures contains list of names of measures which are returned by the command in the first line of the command's output " default="" multiline="true">
         <visibility>
           <rule key="isWS" value="false" />
         </visibility>
       </property>
-      <property key="outputBufferSize" label="outputBufferSize" type="long" description="Size of the output buffer" default="2048">
-        <visibility>
-          <rule key="isWS" value="false" />
-        </visibility>
-      </property>
-      <property key="returnedMeasures" label="Returned Measures" type="string" description="Returned measures contains list of names of measures which are returned by the command in the first line of the command's output " default="" multiline="false">
-        <visibility>
-          <rule key="isWS" value="false" />
-        </visibility>
-      </property>
-      <property key="rcMeasureName" label="RC Measure" type="string" description="Name of the dynamic measure which defines meaning of the return code from the executed command" default="" multiline="false">
-        <visibility>
-          <rule key="isWS" value="false" />
-        </visibility>
-      </property>
+      <property key="rcMeasureName" label="RC Measure" type="string" description="Name of the dynamic measure which defines meaning of the return code from the executed command" default="" multiline="false" />
       <property key="regex" label="Regular Expression" type="string" description="The regular expression the command's output should be matched against." default="(.*)Result(.*)" multiline="false" />
       <property key="successDefinition" label="Success Definition" type="list" description="Defines condition under which monitor returns success: if regular expression matches or not." default="on match">
         <list>
           <item value="on match" />
           <item value="on no match" />
         </list>
+      </property>
+      <property key="triggerIncident" label="Trigger Incident" type="boolean" description="Incident will be triggered if stderr is not empty." default="false">
+        <visibility>
+          <rule key="isWS" value="false" />
+        </visibility>
+      </property>
+      <property key="dtServer" label="DT Server" type="string" description="Dynatrace Server address" default="" multiline="false">
+        <visibility>
+          <rule key="triggerIncident" value="true" />
+        </visibility>
+      </property>
+      <property key="protocol" label="Web Server Protocol" type="list" description="Dynatrace Web Server Protocol" default="https">
+        <list>
+          <item value="https" />
+          <item value="http" />
+        </list>
+        <visibility>
+          <rule key="triggerIncident" value="true" />
+        </visibility>
+      </property>
+      <property key="dtPort" label="DT Server Port" type="long" description="Dynatrace Server Port" default="8021">
+        <visibility>
+          <rule key="triggerIncident" value="true" />
+        </visibility>
+      </property>
+      <property key="dtUser" label="Dynatrace User" type="string" description="User name which is used to access Dynatrace Web Server" default="admin" multiline="false">
+        <visibility>
+          <rule key="triggerIncident" value="true" />
+        </visibility>
+      </property>
+      <property key="dtPassword" label="Dynatrace User Password" type="password" description="Password of the Dynatrace user which is used to access Dynatrace Web Server" default="admin">
+        <visibility>
+          <rule key="triggerIncident" value="true" />
+        </visibility>
+      </property>
+      <property key="profile" label="System Profile" type="string" description="System Profile where incident will be triggered in" default="" multiline="false">
+        <visibility>
+          <rule key="triggerIncident" value="true" />
+        </visibility>
+      </property>
+      <property key="incident" label="Incident Rule Name" type="string" description="Incident Rule Name" default="Custom Events" multiline="false">
+        <visibility>
+          <rule key="triggerIncident" value="true" />
+        </visibility>
+      </property>
+      <property key="severity" label="Incident Severity" type="list" description="Incident Severity" default="severe">
+        <list>
+          <item value="severe" />
+          <item value="warning" />
+          <item value="informational" />
+        </list>
+        <visibility>
+          <rule key="triggerIncident" value="true" />
+        </visibility>
       </property>
     </configuration>
   </extension>
@@ -160,4 +260,3 @@
     <plugin configid="com.dynatrace.diagnostics.plugin.extendedexecutor.GenericExecutionPlugin" class="com.dynatrace.diagnostics.plugin.extendedexecutor.GEAction" />
   </extension>
 </plugin>
-

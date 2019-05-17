@@ -1,66 +1,67 @@
-// Decompiled by DJ v3.12.12.96 Copyright 2011 Atanas Neshkov  Date: 6/25/2013 8:23:50 AM
-// Home Page: http://members.fortunecity.com/neshkov/dj.html  http://www.neshkov.com/dj.html - Check often for new version!
-// Decompiler options: fullnames lnc 
+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+// Jad home page: http://www.kpdus.com/jad.html
+// Decompiler options: packimports(3) 
 // Source File Name:   ConnectionMethod.java
 
 package com.dynatrace.diagnostics.remoteconnection;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import com.dynatrace.diagnostics.plugin.extendedexecutor.helper.GEPluginProperties;
+import java.io.*;
 
 // Referenced classes of package com.dynatrace.diagnostics.remoteconnection:
-//            LocalConnectionMethod, SSHConnectionMethod
+//            LocalConnectionMethod, SSHConnectionMethod, GEReturnObject
 
 public abstract class ConnectionMethod
 {
-			protected static final String PROPS_FILE_ENCODING = "file.encoding";
-			protected static final String DEFAULT_ENCODING = System.getProperty(PROPS_FILE_ENCODING);
-			
-            public ConnectionMethod()
-            {
-            }
 
-            public abstract GEReturnObject executeCommand(java.lang.String s, java.lang.String s1, long size)
-                throws java.lang.Exception;
+    public ConnectionMethod()
+    {
+    }
 
-            public void setup(java.lang.String s, java.lang.String s1, java.lang.String s2, int i)
-                throws java.lang.Exception
-            {
-            }
+    public abstract GEReturnObject executeCommand(String as[], String s, long l, GEPluginProperties gepluginproperties)
+        throws Exception;
 
-            public void teardown()
-                throws java.lang.Exception
-            {
-            }
+    public void setup(String s3, String s4, String s5, int j)
+        throws Exception
+    {
+    }
 
-            protected java.lang.String readInputStream(java.io.InputStream is, long size)
-                throws java.io.IOException
-            {
-/*  19*/        java.lang.StringBuilder strBuild = new StringBuilder();
-/*  20*/        java.io.BufferedReader stdoutReader = new BufferedReader(new InputStreamReader(is, DEFAULT_ENCODING));
-				int bufSize = 0;
-/*  23*/        do
-                {
-/*  23*/            java.lang.String line = stdoutReader.readLine();
-					if (line != null && (bufSize += line.length()) > size) {
-						return strBuild.append(line).append((" ...buffer size is exceeded")).append("\n").toString();
-					}
-/*  24*/            if(line != null)
-                    {
-/*  26*/                strBuild.append((new StringBuilder(java.lang.String.valueOf(line))).append("\n").toString());
-                    } else
-                    {
-/*  28*/                int index = strBuild.lastIndexOf("\n");
-/*  29*/                return index < 0 ? "" : strBuild.substring(0, index);
-                    }
-                } while(true);
-            }
+    public void teardown()
+        throws Exception
+    {
+    }
 
-            public static com.dynatrace.diagnostics.remoteconnection.ConnectionMethod getConnectionMethod(java.lang.String method)
+    protected String readInputStream(InputStream is, long size)
+        throws IOException
+    {
+        StringBuilder strBuild = new StringBuilder();
+        BufferedReader stdoutReader = new BufferedReader(new InputStreamReader(is, DEFAULT_ENCODING));
+        int bufSize = 0;
+        do
+        {
+            String line = stdoutReader.readLine();
+            if(line != null && (long)(bufSize += line.length()) > size)
+                return strBuild.append(line).append(" ...buffer size is exceeded").append("\n").toString();
+            if(line != null)
             {
-/*  35*/        if(method.equals("LOCAL"))
-/*  36*/            return new LocalConnectionMethod();
-/*  38*/        else
-/*  38*/            return new SSHConnectionMethod();
+                strBuild.append((new StringBuilder(String.valueOf(line))).append("\n").toString());
+            } else
+            {
+                int index = strBuild.lastIndexOf("\n");
+                return index >= 0 ? strBuild.substring(0, index) : "";
             }
+        } while(true);
+    }
+
+    public static ConnectionMethod getConnectionMethod(String method)
+    {
+        if(method.equals("LOCAL"))
+            return new LocalConnectionMethod();
+        else
+            return new SSHConnectionMethod();
+    }
+
+    protected static final String PROPS_FILE_ENCODING = "file.encoding";
+    protected static final String DEFAULT_ENCODING = System.getProperty("file.encoding");
+
 }
